@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Product Entry</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+
+</head>
+<body>
+
+
+<div class="container">
+	<br>
+	<a href="/"><button class="btn btn-primary">Home</button></a>
+	<h1>Billing Page</h1>
+	
+	<form action="http://localhost:8080/prod/code" method="post">
+		<div class="col-md-3 ">
+		Search By Product Code:<input class="form-control" type="text" name="id" placeholder="code" required><br>
+		<input type="submit" class="btn btn-primary pull-right" value="Search">
+		</div>
+	</form>
+	
+	<form action="http://localhost:8080/prod/name" method="post">
+		<div class="col-md-3 ">
+		Search By Product Name:<input class="form-control" type="text" name="name" placeholder="name" required><br>
+		<input type="submit" class="btn btn-primary pull-right" value="Search">
+		</div>
+	</form>	
+	
+	<br>
+	
+	
+	
+	
+	<div class="clearfix"></div>
+	
+	<div>
+		<h1>Billing List</h1>
+		<table id="demoTbl" class="table table-striped table-hover" >
+			<tr>
+				<th>Code</th>
+				<th>Name</th>
+				<th>Price</th>
+				<th >GST</th>
+				<th >Quantity</th>
+				<th>Product Total</th>
+			</tr>
+			<tr th:each="message,index : ${prod}">
+		        <td th:text="${message.id}">1</td>
+				<td th:text="${message.name}">1</td>
+		        <td class="price" th:text="${message.price}">Text ...</td>
+		        <td th:text="${message.gst}">Text ...</td>
+		        <td class="col-md-1"><input  class="qty form-control" type="text"  name="qty" value="0" th:onfocusout="'javascript:myFunction(value,\'' + ${message.price} + '\',\''+ ${message.id} + '\',\''+ ${message.gst} + '\');'"  th:onmouseout="'javascript:myFunction(value,\'' + ${message.price} + '\',\''+ ${message.id} + '\',\''+ ${message.gst} + '\');'" ></td>
+		        
+		        <script th:inline="javascript">
+				/*<![CDATA[*/		
+					var grossTotal=0;
+					var temp=0;
+					
+					var mymap=new Map();
+					
+					function myFunction(qty,price,id,gst) {
+					//var qty=document.getElementsByClassName("qty")[0].value;
+					//var price=document.getElementsByClassName("price")[0].innerHTML;
+					//var cl=[[${message}]].id;
+					console.log(qty,price,id,gst,gst/100);
+					var totPrice=qty*price;
+					var gstCost =totPrice*(gst/100);
+					var total=totPrice+gstCost;
+					document.getElementById(id).innerHTML=total;
+					
+					
+					
+					if(mymap.has(id)){
+						var gross=0;
+						mymap.set(id, total);
+						mymap.forEach(function(value, key) {
+							  gross+=value;
+							});
+						document.getElementById("grossTotal").innerHTML=gross;
+						console.log(mymap);
+						console.log(gross);
+					}else{
+						var gross=0;
+						mymap.set(id, total);
+						mymap.forEach(function(value, key) {
+							  gross+=value;
+							})
+						document.getElementById("grossTotal").innerHTML=gross;
+						console.log(mymap);
+					}
+					
+					
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					/*if(temp!=totPrice+gstCost){
+						temp=totPrice+gstCost;
+						
+						lst.push(temp);
+						if(!ids.includes(id)){
+							//if id is there already then the value must be changed ...so delete previous val and add new
+							lst.remove
+							ids.push(id);
+							console.log(lst,id);
+							grossTotal+=totPrice+gstCost;
+							document.getElementById("grossTotal").innerHTML=grossTotal;
+						}
+					}*/
+					
+					
+				}
+				 //   var message = /*[[${message}]]*/ 'default';
+				   // console.log(message);
+				
+				  
+				   
+				/*]]>*/
+				</script>
+				<td th:id="${message.id}"  ></td>
+				
+		        <br/>
+			</tr>
+			
+			<tr>
+				<th colspan="5">Gross Total</th>
+				<th id="grossTotal" ></th>
+			</tr>
+		</table>
+	</div>
+
+</div>
+
+
+
+</body>
+
+</html>
